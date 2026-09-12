@@ -1,6 +1,7 @@
 "use client";
 
 import { SlidersHorizontal, X } from "lucide-react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
@@ -225,12 +226,12 @@ export function ShopBrowser({ products }: { products: Product[] }) {
           const selected = key
             ? search.get(key) === value
             : !search.has("family") && !search.has("collection");
+          const href = key ? `/shop?${key}=${value}` : "/shop";
           return (
-            <button
+            <Link
               key={label}
-              type="button"
-              aria-pressed={selected}
-              onClick={() => (key ? setParam(key, value) : router.push("/shop"))}
+              href={href}
+              aria-current={selected ? "page" : undefined}
               className={`shrink-0 border px-4 py-2 text-sm font-semibold transition ${
                 selected
                   ? "border-aurevia-plum bg-aurevia-plum text-aurevia-ivory"
@@ -238,7 +239,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
               }`}
             >
               {label}
-            </button>
+            </Link>
           );
         })}
       </nav>
