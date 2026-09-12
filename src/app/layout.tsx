@@ -19,6 +19,10 @@ const cormorantGaramond = localFont({
 export const metadata: Metadata = {
   title: "Aurévia",
   description: "A premium fragrance discovery and shopping experience.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

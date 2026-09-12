@@ -1,19 +1,63 @@
 # Aurévia
 
-A luxury fragrance storefront built with Next.js, React, TypeScript, Prisma and PostgreSQL. The interface retains the established Aurévia editorial system; Phase 10 introduces the production database contract and controlled seed data.
+Aurévia is a modern luxury fragrance storefront inspired by nature, atmosphere, and quiet elegance. The platform brings together a complete, image-backed perfume catalogue, a refined shopping experience, secure account flows, and an admin dashboard for product management.
 
-## Production catalog
+Built with Next.js, React, TypeScript, PostgreSQL, Prisma 8, and Paystack.
 
-The production seed contains only the 14 approved perfumes specified for Phase 10. It is deliberately idempotent: running it again creates missing records but does not overwrite existing product, image, or variant changes.
+## Highlights
 
-## Required environment variables
+- 119 image-backed fragrances across Parfum, Eau de Parfum, and Eau de Toilette concentrations
+- Browse by fragrance family, collection, size, and concentration
+- Functional alphabetical, price low-to-high, and price high-to-low product sorting
+- Product pages, cart, checkout, account, order, wishlist, and fragrance-guide experiences
+- Secure customer authentication and protected account routes
+- Admin dashboard for managing products, imagery, variants, and catalogue visibility
+- Server-side payment verification with Paystack
+- Cloudinary-ready media configuration
+- Database catalogue with a checked-in fallback so customers can still browse when the database is temporarily unavailable
 
-Copy `.env.example` to `.env.local` and populate only the values you use:
+## Tech stack
+
+- [Next.js](https://nextjs.org/) 16 and React 19
+- TypeScript
+- Tailwind CSS and Radix UI
+- PostgreSQL with Prisma 8 contract-first ORM
+- NextAuth credentials authentication
+- Paystack payments
+- Cloudinary media management
+- Zustand client state
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 22 or newer
+- npm
+- A PostgreSQL database, such as Neon or Supabase
+
+### Install
 
 ```bash
+git clone https://github.com/YOUR-USERNAME/aurevia.git
+cd aurevia
+npm install
+```
+
+### Environment variables
+
+Copy the example file for Next.js and create a separate Prisma CLI environment file:
+
+```powershell
+Copy-Item .env.example .env.local
+Copy-Item .env.example .env
+```
+
+Set the values you use. Keep `.env` and `.env.local` private; they are intentionally excluded from Git.
+
+```ini
 DATABASE_URL=
 AUTH_SECRET=
-NEXTAUTH_URL=
+NEXTAUTH_URL=http://localhost:3000
 PAYSTACK_SECRET_KEY=
 NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=
 CLOUDINARY_CLOUD_NAME=
@@ -24,36 +68,57 @@ ENABLE_DEMO_DELIVERY=false
 DEMO_DELIVERY_DELAY_MS=10000
 ```
 
-Use a Vercel-compatible PostgreSQL database such as Neon or Supabase. Never commit `.env.local` or production keys.
+For Prisma commands, `DATABASE_URL` must be available in `.env`. Next.js reads it from `.env.local`.
 
-## Database setup
+### Database setup
 
-The Prisma 8 source of truth is `prisma/contract.prisma`. The generated `contract.json` and `contract.d.ts` are checked in for the PostgreSQL runtime; do not edit those generated files. The initial additive migration plan is committed under `migrations/app/`.
-
-Copy the database URL to both `.env.local` (for Next.js) and the ignored `.env` (for Prisma CLI commands), then run:
+The Prisma 8 source of truth is [prisma/contract.prisma](prisma/contract.prisma). Do not edit generated contract files directly.
 
 ```bash
 npm run db:contract
-npm run db:plan       # review the generated plan before applying it
-npm run db:migrate    # applies the reviewed plan to the configured database
+npm run db:plan
+npm run db:migrate
 npm run db:seed
 ```
 
-The migration command is deliberately separate from planning. Do not run it against a production database until the generated operations have been reviewed. Do not seed on application startup.
+`db:seed` is idempotent: it creates missing catalogue data without overwriting existing products, images, or variants. The full seed contains 119 image-backed Aurévia fragrances.
 
-To establish the initial administrator, register a normal account and promote its `role` to `ADMIN` using a secure database console or a controlled maintenance script. The intended address is supplied through `ADMIN_EMAIL`; no default admin password exists.
-
-## Payments and media
-
-Paystack and Cloudinary require their own accounts and environment variables. Keep `PAYSTACK_SECRET_KEY` and `CLOUDINARY_API_SECRET` server-only. The payment flow must create orders only after server-side Paystack verification; browser totals and callbacks are not authoritative.
-
-## Development
+### Run locally
 
 ```bash
-npm install
 npm run dev
-npm run lint
-npm run build
 ```
 
-The database uses Prisma 8's contract-first PostgreSQL runtime (`@prisma/orm-postgres`). Browser state is not trusted for catalog mutations, checkout totals, stock, or payments; use the authenticated server routes.
+Visit [http://localhost:3000](http://localhost:3000).
+
+## Quality checks
+
+```bash
+npm run lint
+npm run build
+npm start
+```
+
+## Admin access
+
+Create a normal customer account, then promote its database `role` to `ADMIN` using a secure database console or a controlled maintenance script. Aurévia intentionally does not ship with a default administrator password.
+
+## Deployment
+
+1. Push the project to GitHub.
+2. Import the repository in [Vercel](https://vercel.com/new).
+3. Add the same environment variables to Vercel's Production environment.
+4. Set `NEXTAUTH_URL` to your deployed site URL, for example `https://aurevia.vercel.app`.
+5. Deploy.
+
+Make sure the production `DATABASE_URL` points to a reachable PostgreSQL database and that its credentials remain server-only.
+
+## Security notes
+
+- Never commit `.env`, `.env.local`, database URLs, Paystack secret keys, or Cloudinary API secrets.
+- Prices, product availability, stock, checkout totals, and payment verification are enforced server-side.
+- Always verify Paystack payments on the server before creating a paid order.
+
+## License
+
+This project is private and proprietary. All rights reserved.
