@@ -1,0 +1,2 @@
+export const shippingMethods=[{id:"standard",name:"Standard Delivery",estimate:"2–5 business days",fee:3500},{id:"express",name:"Express Delivery",estimate:"1–2 business days",fee:7500}] as const
+export const nigerianStates=["Abia","Adamawa","Akwa Ibom","Anambra","Bauchi","Bayelsa","Benue","Borno","Cross River","Delta","Ebonyi","Edo","Ekiti","Enugu","FCT","Gombe","Imo","Jigawa","Kaduna","Kano","Katsina","Kebbi","Kogi","Kwara","Lagos","Nasarawa","Niger","Ogun","Ondo","Osun","Oyo","Plateau","Rivers","Sokoto","Taraba","Yobe","Zamfara"]

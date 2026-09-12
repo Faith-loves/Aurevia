@@ -1,0 +1,2 @@
+import { Skeleton } from "@/components/ui/skeleton"
+export default function ProductLoading(){return <main className="aurevia-container grid gap-10 py-16 lg:grid-cols-2"><Skeleton className="aspect-[4/5] bg-aurevia-cream"/><div className="space-y-5 pt-8"><Skeleton className="h-4 w-32"/><Skeleton className="h-20 w-3/4"/><Skeleton className="h-6 w-1/2"/><Skeleton className="h-12 w-40"/><Skeleton className="h-32 w-full"/><Skeleton className="h-14 w-full"/></div></main>}

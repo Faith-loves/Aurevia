@@ -1,0 +1,3 @@
+import { z } from "zod"
+export const checkoutSchema=z.object({email:z.string().email("Enter a valid email address."),contactPhone:z.string().regex(/^[+\d][\d\s-]{7,18}$/,"Enter a valid phone number."),firstName:z.string().trim().min(2,"Enter your first name."),lastName:z.string().trim().min(2,"Enter your last name."),address:z.string().trim().min(5,"Enter your delivery address."),apartment:z.string().optional(),city:z.string().trim().min(2,"Enter your city."),state:z.string().min(1,"Select a state."),country:z.string().min(1),postalCode:z.string().optional(),deliveryMethod:z.enum(["standard","express"]),paymentMethod:z.enum(["paystack","bank"])})
+export type CheckoutValues=z.infer<typeof checkoutSchema>

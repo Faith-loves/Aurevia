@@ -1,0 +1,5 @@
+import type {Metadata} from "next"
+import {ArticlePage} from "@/components/help/article-page"
+import {shippingMethods} from "@/lib/checkout"
+export const metadata:Metadata={title:"Shipping Information | Aurévia",description:"Learn about Aurévia delivery areas, methods, estimates, fees and tracking."}
+export default function ShippingPage(){return <ArticlePage eyebrow="Delivery" title="Shipping Information" intro="Clear delivery options for your Aurévia order." sections={[{title:"Delivery Areas",body:"The current Aurévia store experience supports delivery addresses in Nigeria. We do not currently claim worldwide delivery."},{title:"Delivery Methods",body:shippingMethods.map(x=>`${x.name}: ${x.estimate}.`).join(" ")},{title:"Delivery Fees",body:"Fees are calculated at checkout using the configured delivery method and shown before an order is placed."},{title:"Tracking",body:"Signed-in customers can open Account, choose Orders and view the available development tracking status. Guest courier tracking is not yet connected."}]} links={[{label:"View Your Orders",href:"/account/orders"},{label:"View Order Help",href:"/help/orders"}]}/>}
