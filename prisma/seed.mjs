@@ -31,6 +31,11 @@ async function main() {
       if (!record) {
         record = await db.orm.public.Product.create({ name: product.name, slug: product.slug, description: product.description, shortDescription: product.subtitle, fragranceFamily: product.fragranceFamily, concentration: product.concentration, intensity: product.intensity, occasions: [product.collection], tags: product.tags, topNotes: product.topNotes, heartNotes: product.heartNotes, baseNotes: product.baseNotes, featured: product.isFeatured, isNew: product.isNew, bestSeller: product.isBestSeller, active: true });
         productBySlug.set(product.slug, record);
+      } else {
+        await db.orm.public.Product.where({ id: record.id }).update({
+          isNew: product.isNew,
+          bestSeller: product.isBestSeller,
+        });
       }
       const collection = collectionBySlug.get(collectionSlug(product.collection));
       if (!collection) throw new Error(`Missing collection for ${product.name}.`);
