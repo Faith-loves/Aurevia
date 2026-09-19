@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FieldError, PasswordField } from "@/components/auth/form-parts";
@@ -34,7 +34,11 @@ export function SignInForm() {
       redirect: false,
     });
     if (!result?.ok) return setFormError("We couldn't sign you in with those credentials.");
-    router.push("/account");
+    const session = await getSession();
+    if (!session?.user) {
+      return setFormError("Your session could not be loaded. Please sign in again.");
+    }
+    router.replace(session.user.role === "ADMIN" ? "/admin" : "/account");
     router.refresh();
   }
   return (
